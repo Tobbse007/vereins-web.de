@@ -1,6 +1,111 @@
 // Smooth Navigation and Popup Management
 document.addEventListener('DOMContentLoaded', function() {
     
+    // Mobile Menu Toggle Functionality
+    function initMobileMenu() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+        const hamburgerLines = mobileMenuButton ? mobileMenuButton.querySelectorAll('.hamburger-line') : [];
+        let isMenuOpen = false;
+
+        if (!mobileMenuButton || !mobileMenu || !mobileMenuContent) {
+            console.error('Mobile menu elements not found');
+            return;
+        }
+
+        console.log('Mobile menu elements found and initialized');
+
+        function toggleMobileMenu() {
+            console.log('Toggling menu, current state:', isMenuOpen ? 'open' : 'closed');
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                // Get the natural height of the content
+                const contentHeight = mobileMenuContent.scrollHeight;
+                console.log('Content height:', contentHeight + 'px');
+                
+                // Open menu with smooth animation
+                mobileMenu.style.height = contentHeight + 'px';
+                mobileMenu.style.opacity = '1';
+                
+                // Transform hamburger to X with smooth animation (perfektes symmetrisches X)
+                hamburgerLines.forEach((line, index) => {
+                    line.style.transition = 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    line.style.transformOrigin = 'center center';
+                    
+                    if (index === 0) {
+                        // Obere Linie: zur Mitte bewegen und um 45° drehen für X-Form
+                        line.style.transform = 'translateY(8px) rotate(45deg)';
+                    } else if (index === 1) {
+                        // Mittlere Linie komplett ausblenden
+                        line.style.opacity = '0';
+                        line.style.transform = 'scale(0)';
+                    } else if (index === 2) {
+                        // Untere Linie: zur Mitte bewegen und um -45° drehen für X-Form
+                        line.style.transform = 'translateY(-8px) rotate(-45deg)';
+                    }
+                });
+                
+                console.log('Mobile menu opened');
+            } else {
+                // Close menu with smooth animation
+                mobileMenu.style.height = '0px';
+                mobileMenu.style.opacity = '0';
+                
+                // Transform X back to hamburger
+                hamburgerLines.forEach(line => {
+                    line.style.transition = 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    line.style.transform = '';
+                    line.style.opacity = '';
+                });
+                
+                console.log('Mobile menu closed');
+            }
+        }
+
+        // Add click listener to mobile menu button
+        mobileMenuButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Mobile menu button clicked');
+            toggleMobileMenu();
+        });
+
+        // Close menu when clicking on menu links
+        const menuLinks = mobileMenu.querySelectorAll('a');
+        console.log('Found', menuLinks.length, 'menu links');
+        
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (isMenuOpen) {
+                    console.log('Menu link clicked, closing menu');
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (isMenuOpen && 
+                !mobileMenu.contains(e.target) && 
+                !mobileMenuButton.contains(e.target)) {
+                console.log('Clicked outside menu, closing');
+                toggleMobileMenu();
+            }
+        });
+
+        // Close menu on window resize if open (desktop breakpoint)
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768 && isMenuOpen) {
+                console.log('Resized to desktop, closing menu');
+                toggleMobileMenu();
+            }
+        });
+
+        console.log('Mobile menu initialized successfully');
+    }
+    
     // Enhanced Smooth Scrolling for all anchor links
     function initSmoothScrolling() {
         // Add smooth scrolling to all anchor links
@@ -133,8 +238,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
 
     // Navigation highlighting (existing functionality)
-    const navItems = document.querySelectorAll('.nav-item');
-    const sections = ['leistungen', 'why-website', 'ueber-uns', 'ablauf', 'referenzen', 'preise', 'kontakt'];
+    const desktopNavItems = document.querySelectorAll('#nav-container .nav-item');
+    const mobileNavItems = document.querySelectorAll('#mobile-menu-content .nav-item');
+    const sections = ['leistungen', 'why-website', 'ueber-uns', 'ablauf', 'referenzen-neu', 'preise', 'kontakt'];
     
     function updateActiveNav() {
         const scrollPosition = window.scrollY + 100;
@@ -152,13 +258,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        navItems.forEach((item, index) => {
+        console.log('Active section index:', activeIndex, 'Section:', sections[activeIndex] || 'none');
+        
+        // Update desktop navigation
+        desktopNavItems.forEach((item, index) => {
             if (index === activeIndex) {
                 item.classList.add('text-primary-blue');
                 item.classList.remove('text-gray-700');
             } else {
                 item.classList.add('text-gray-700');
                 item.classList.remove('text-primary-blue');
+            }
+        });
+        
+        // Update mobile navigation
+        mobileNavItems.forEach((item, index) => {
+            if (index === activeIndex) {
+                item.classList.add('text-primary-blue');
+                item.classList.remove('text-gray-700');
+                // Aktiviere die blaue Box (Hintergrund + linker Border)
+                item.classList.add('bg-primary-blue/5', 'border-primary-blue');
+                item.classList.remove('border-transparent');
+                // Setze data-active für zusätzliche CSS-Regeln
+                item.setAttribute('data-active', 'true');
+                console.log('Set active mobile nav:', item.textContent, 'index:', index);
+            } else {
+                item.classList.add('text-gray-700');
+                item.classList.remove('text-primary-blue');
+                // Entferne die blaue Box
+                item.classList.remove('bg-primary-blue/5', 'border-primary-blue');
+                item.classList.add('border-transparent');
+                // Entferne data-active
+                item.removeAttribute('data-active');
             }
         });
     }
@@ -174,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const ctaSection = document.getElementById('cta-section');
         const warumSection = document.getElementById('ueber-uns');
         const ablaufSection = document.getElementById('ablauf');
-        const referenzenSection = document.getElementById('referenzen');
+    const referenzenSection = document.getElementById('referenzen-neu');
         const preiseSection = document.getElementById('preise');
         const kontaktSection = document.getElementById('kontakt');
         
@@ -221,13 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        if (referenzenSection) {
-            allSections.push({
-                section: referenzenSection,
-                name: 'Referenzen',
-                delays: [200, 400, 600, 800] // Titel + 3 Referenz-Karten
-            });
-        }
+        // Neue Referenzen-Sektion besitzt eigene Animationen; falls gewünscht, könnte man hier zukünftig scroll-animation-Elemente hinzufügen
         
         if (preiseSection) {
             allSections.push({
@@ -428,6 +553,196 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Initialize mobile menu
+    initMobileMenu();
+
     // Initialize scroll animations
     initScrollAnimations();
+
+    // Hero Cursor Mouse Follow
+    initHeroCursor();
+});
+
+function initHeroCursor() {
+    const heroCursor = document.getElementById('hero-cursor');
+    const heroMockup = document.getElementById('hero-mockup');
+    
+    if (!heroCursor || !heroMockup) {
+        console.log('Hero cursor elements not found');
+        return;
+    }
+
+    let isMouseInside = false;
+    let originalAnimation = heroCursor.style.animation;
+
+    heroMockup.addEventListener('mouseenter', function() {
+        isMouseInside = true;
+        // Stoppe die ursprüngliche Animation
+        heroCursor.style.animation = 'none';
+        heroCursor.style.transition = 'top 0.1s ease-out, left 0.1s ease-out';
+        console.log('Mouse entered hero mockup - cursor following mouse');
+    });
+
+    heroMockup.addEventListener('mouseleave', function() {
+        isMouseInside = false;
+        // Starte die ursprüngliche Animation wieder
+        heroCursor.style.animation = originalAnimation;
+        heroCursor.style.transition = 'all 0.5s ease-out';
+        console.log('Mouse left hero mockup - cursor resumed animation');
+    });
+
+    heroMockup.addEventListener('mousemove', function(e) {
+        if (!isMouseInside) return;
+        
+        // Berechne die Position relativ zum Mockup-Container
+        const rect = heroMockup.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Konvertiere zu Prozent-Werten (mit leichtem Offset für bessere Sichtbarkeit)
+        const percentX = ((x / rect.width) * 100);
+        const percentY = ((y / rect.height) * 100);
+        
+        // Begrenze die Werte innerhalb des Containers (mit 1% Rand)
+        const clampedX = Math.max(1, Math.min(99, percentX));
+        const clampedY = Math.max(1, Math.min(99, percentY));
+        
+        // Setze die Position des Cursors
+        heroCursor.style.left = clampedX + '%';
+        heroCursor.style.top = clampedY + '%';
+    });
+
+    console.log('Hero cursor mouse follow initialized');
+}
+
+// [Deprecated] Old Filter + Pagination Slider for Referenzen (replaced by referenzen.js)
+function initReferenzenSlider() {
+    const filterContainer = document.querySelector('.filter-container');
+    const btnVerein = document.getElementById('filter-verein');
+    const btnBusiness = document.getElementById('filter-business');
+    const viewport = document.getElementById('referenzen-viewport');
+    const trackVerein = document.getElementById('track-verein');
+    const trackBusiness = document.getElementById('track-business');
+    const prevBtn = document.getElementById('ref-prev');
+    const nextBtn = document.getElementById('ref-next');
+    const pageCurrent = document.getElementById('ref-page-current');
+    const pageTotal = document.getElementById('ref-page-total');
+
+    if (!filterContainer || !btnVerein || !btnBusiness || !viewport || !trackVerein || !trackBusiness || !prevBtn || !nextBtn || !pageCurrent || !pageTotal) {
+        console.warn('Referenzen slider: required elements missing');
+        return;
+    }
+
+    let active = 'verein';
+    let page = 0; // zero-based
+
+    function getActiveTrack() {
+        return active === 'verein' ? trackVerein : trackBusiness;
+    }
+
+    function pagesCount(track) {
+        return track.querySelectorAll('.slider-page').length;
+    }
+
+    function updateIndicator() {
+        const count = pagesCount(getActiveTrack());
+        pageCurrent.textContent = String(page + 1);
+        pageTotal.textContent = String(count);
+        // Infinite loop: only disable if there is 0 or 1 page
+        const disable = count <= 1;
+        prevBtn.disabled = disable;
+        nextBtn.disabled = disable;
+    }
+
+    function computeMaxPageHeight(track) {
+        let maxH = 0;
+        const pages = track.querySelectorAll('.slider-page');
+        pages.forEach(p => {
+            // Temporarily show page to measure if needed
+            const prevTransform = track.style.transform;
+            // move track so that this page is visible for correct intrinsic height (not strictly necessary, but safer)
+            track.style.transform = `translateX(-${Array.from(pages).indexOf(p) * 100}%)`;
+            const h = p.offsetHeight;
+            if (h > maxH) maxH = h;
+            track.style.transform = prevTransform;
+        });
+        return maxH;
+    }
+
+    function updateViewportHeight() {
+        const maxHActive = computeMaxPageHeight(getActiveTrack());
+        const maxHOther = computeMaxPageHeight(active === 'verein' ? trackBusiness : trackVerein);
+        const maxH = Math.max(maxHActive, maxHOther);
+        viewport.style.height = (maxH > 0 ? maxH : viewport.offsetHeight || 384) + 'px';
+    }
+
+    function updateTracksVisibility() {
+        const vereinPages = pagesCount(trackVerein);
+        const businessPages = pagesCount(trackBusiness);
+
+        trackVerein.style.transform = active === 'verein' ? `translateX(-${page * 100}%)` : 'translateX(0)';
+        trackBusiness.style.transform = active === 'business' ? `translateX(-${page * 100}%)` : 'translateX(0)';
+
+        trackVerein.setAttribute('data-active', String(active === 'verein'));
+        trackBusiness.setAttribute('data-active', String(active === 'business'));
+
+        // No clamping here; go() handles wrapping for infinite navigation
+        updateIndicator();
+        updateViewportHeight();
+    }
+
+    function switchCategory(target) {
+        if (active === target) return;
+        active = target;
+        page = 0;
+        if (active === 'verein') {
+            btnVerein.classList.add('active');
+            btnBusiness.classList.remove('active');
+            filterContainer.classList.add('verein-active');
+        } else {
+            btnBusiness.classList.add('active');
+            btnVerein.classList.remove('active');
+            filterContainer.classList.remove('verein-active');
+        }
+        updateTracksVisibility();
+    }
+
+    function go(delta) {
+        const count = pagesCount(getActiveTrack());
+        if (count <= 0) return;
+        page = (page + delta + count) % count;
+        updateTracksVisibility();
+    }
+
+    btnVerein.addEventListener('click', () => switchCategory('verein'));
+    btnBusiness.addEventListener('click', () => switchCategory('business'));
+    prevBtn.addEventListener('click', () => go(-1));
+    nextBtn.addEventListener('click', () => go(1));
+
+    // Simple swipe for mobile
+    let startX = 0;
+    viewport.addEventListener('touchstart', (e) => {
+        if (!e.touches || e.touches.length === 0) return;
+        startX = e.touches[0].clientX;
+    }, { passive: true });
+    viewport.addEventListener('touchend', (e) => {
+        const endX = (e.changedTouches && e.changedTouches[0]?.clientX) || startX;
+        const dx = endX - startX;
+        if (Math.abs(dx) > 40) {
+            if (dx < 0) go(1); else go(-1);
+        }
+    });
+
+    // Initialize default
+    updateTracksVisibility();
+
+    // Recompute height on resize
+    window.addEventListener('resize', () => {
+        updateViewportHeight();
+    });
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', function() {
+    // Referenzen slider now initialized in referenzen.js (scroll-snap)
 });

@@ -1,0 +1,132 @@
+9/* Dedicated styles for the Referenzen section */
+
+/* Ensure consistent font family */
+#referenzen, #referenzen * {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Base container */
+#referenzen {
+  position: relative;
+}
+
+/* Controls */
+#referenzen .filter-container {
+  position: relative;
+}
+
+/* Row with arrows and viewport */
+#referenzen .slider-row {
+  position: relative;
+  z-index: 1;
+  gap: 1.25rem; /* more space between arrows and viewport */
+}
+
+/* Viewport uses horizontal scroll-snap instead of absolute tracks */
+#referenzen #referenzen-viewport {
+  position: relative !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: initial !important;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  touch-action: pan-x pan-y;
+}
+
+#referenzen #referenzen-viewport::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Track is a simple flex row */
+#referenzen .slider-track {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  display: flex !important;
+  flex-direction: row;
+  width: auto !important;
+  gap: 0;
+  transform: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+}
+
+#referenzen .slider-track[data-active="false"] {
+  display: none !important;
+}
+
+#referenzen .slider-track[data-active="true"] {
+  display: flex !important;
+}
+
+/* Each page consumes full viewport width */
+#referenzen .slider-page {
+  flex: 0 0 100% !important;
+  scroll-snap-align: start;
+  gap: 2.5rem !important; /* more spacing between cards */
+}
+
+/* Card tweaks: keep interactions crisp */
+#referenzen .referenz-card {
+  height: 100%;
+  will-change: transform, box-shadow;
+  /* Remove any Tailwind shadow utilities via override */
+  box-shadow: none !important;
+  border: 1px solid #e5e7eb !important; /* gray-200 for subtle separation */
+}
+
+/* Increase inner padding of card content */
+#referenzen .referenz-card > .p-8 {
+  padding: 2.25rem !important; /* default p-8 is 2rem; give extra cushion */
+}
+
+/* Make the top media area taller to enlarge the visible window */
+#referenzen .referenz-card .relative.overflow-hidden.bg-gray-50 {
+  height: 20rem !important; /* was h-72 (~18rem) */
+}
+
+/* Selection & hover stability already handled; keep here as redundancy */
+#referenzen .referenz-card, 
+#referenzen .referenz-card * {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+#referenzen .referenz-card.scroll-animation.visible:hover {
+  transform: scale(1.02) !important;
+  box-shadow: none !important; /* no hover shadow */
+  border-color: #d1d5db !important; /* gray-300 on hover for tiny feedback */
+}
+
+/* Arrows – keep above content */
+#referenzen #ref-prev,
+#referenzen #ref-next {
+  z-index: 2;
+}
+
+/* Indicator */
+#referenzen #ref-indicator { 
+  line-height: 1; 
+}
+#referenzen #ref-indicator span { 
+  font-variant-numeric: tabular-nums; 
+}
+
+/* Slightly more horizontal padding inside the wrapper */
+#referenzen .referenzen-wrapper {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-top: 1.25rem;   /* more space above the whole block */
+  margin-bottom: 1.75rem;/* more space below the whole block */
+}
+
+/* Add extra breathing room inside the scroll viewport */
+#referenzen #referenzen-viewport {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+}

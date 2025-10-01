@@ -1,0 +1,294 @@
+/* New, independent Referenzen section (different design + system) */
+
+#referenzen-neu {
+  position: relative;
+  background: #ffffff; /* white section background */
+  font-family: 'Inter', system-ui, sans-serif; /* match site font */
+  overflow-x: hidden; /* prevent any accidental horizontal overflow */
+}
+
+/* Section spacing and background */
+#referenzen-neu .section-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem; /* extra padding for shadows */
+}
+
+/* Filter buttons bar */
+#referenzen-neu .r2-filter {
+  display: inline-flex;
+  background: #F3F4F6; /* gray-100 */
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  position: relative;
+}
+
+#referenzen-neu .r2-filter .r2-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: calc(50% - 6px);
+  left: 4px;
+  background: linear-gradient(135deg, #3370FF 0%, #4080FF 100%);
+  border-radius: 0.6rem;
+  transition: transform 250ms ease;
+  z-index: 0;
+}
+
+#referenzen-neu .r2-filter.business .r2-pill {
+  transform: translateX(100%);
+}
+
+#referenzen-neu .r2-filter button {
+  position: relative;
+  z-index: 1;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  border-radius: 0.6rem;
+}
+
+#referenzen-neu .r2-filter button.active {
+  color: #fff;
+}
+
+#referenzen-neu .r2-filter button:not(.active) {
+  color: #4B5563; /* gray-600 */
+}
+
+/* Slider viewport using fade pages (no transforms for clicks) */
+#referenzen-neu .r2-row {
+  position: relative;
+}
+
+#referenzen-neu .r2-viewport {
+  position: relative;
+  min-height: 22rem; /* a bit taller to match card height */
+  overflow: visible; /* allow shadows to show outside bounds */
+  padding: 1rem 0; /* space around cards for shadows */
+}
+
+#referenzen-neu .r2-pages {
+  position: relative;
+}
+
+#referenzen-neu .r2-page {
+  position: absolute;
+  inset: 1rem 0; /* account for padding in viewport */
+  opacity: 0;
+  transform: translateY(15px) scale(0.98);
+  pointer-events: none;
+  transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+#referenzen-neu .r2-page[data-active="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Simplified card animation - always visible to prevent disappearing */
+#referenzen-neu .r2-page .r2-card {
+  opacity: 1; /* Always visible */
+  transform: translateY(0) scale(1); /* Always in position */
+}
+
+#referenzen-neu .r2-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding: 0 0.5rem; /* extra horizontal padding for shadows */
+}
+
+@media (min-width: 1024px) {
+  #referenzen-neu .r2-grid {
+    grid-template-columns: 1fr 1fr; /* exactly two side-by-side */
+    gap: 2.5rem;
+  }
+}
+
+/* Card design: elegant shadows like price boxes */
+#referenzen-neu .r2-card {
+  background: white;
+  border: 1px solid #F3F4F6; /* very light gray border */
+  border-radius: 1.5rem; /* slightly more rounded */
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0) scale(1);
+  will-change: transform, box-shadow;
+  opacity: 1; /* Always visible to prevent disappearing */
+}
+
+#referenzen-neu .r2-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.12), 0 8px 12px -5px rgba(0, 0, 0, 0.06);
+  border-color: #E5E7EB;
+}
+
+#referenzen-neu .r2-media {
+  height: 14rem;
+  background: #F8FAFC; /* very light background */
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+#referenzen-neu .r2-media-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.75rem;
+  padding: 1rem;
+  height: 100%;
+}
+
+#referenzen-neu .r2-media-grid .r2-lg {
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 2;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+#referenzen-neu .r2-media-grid .r2-sm {
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+  #referenzen-neu .r2-media {
+    height: 16rem;
+  }
+}
+
+#referenzen-neu .r2-content {
+  padding: 2rem; /* match the spacious feel of Preise boxes */
+}
+
+#referenzen-neu .r2-title {
+  font-size: 1.875rem; /* match Preise boxes: text-3xl = 1.875rem */
+  font-weight: 700; /* match Preise boxes: font-bold = 700 */
+  color: #334155; /* match Preise boxes: text-dark-gray */
+  line-height: 1.2; /* tighter line height like Preise boxes */
+  margin-bottom: 0.5rem; /* match spacing */
+}
+
+#referenzen-neu .r2-badge {
+  font-size: 0.75rem; /* text-sm = 0.875rem in original, but 0.75rem looks cleaner */
+  font-weight: 600; /* match original: font-semibold = 600 */
+  padding: 0.25rem 0.5rem; /* match original spacing */
+  border-radius: 9999px;
+  box-shadow: none; /* remove shadow to match original badges */
+}
+
+#referenzen-neu .r2-badge.verein {
+  color: #047857;
+  background: #D1FAE5; /* match original: bg-green-100 */
+}
+
+#referenzen-neu .r2-badge.business {
+  color: #1D4ED8;
+  background: #DBEAFE; /* match original: similar to bg-blue-100 */
+}
+
+#referenzen-neu .r2-desc {
+  color: #64748B; /* slightly lighter gray like Preise boxes descriptions */
+  line-height: 1.625; /* match Preise boxes: leading-relaxed */
+  font-size: 1.125rem; /* match Preise boxes: text-lg = 1.125rem */
+  margin-bottom: 1.5rem; /* match spacing from Preise boxes */
+}
+
+#referenzen-neu .r2-chip {
+  font-size: 0.75rem; /* match original: text-xs */
+  font-weight: 400; /* normal weight like original chips */
+  padding: 0.25rem 0.5rem; /* match original: px-2 py-1 */
+  border-radius: 9999px;
+  background: #F3F4F6;
+  color: #374151;
+  border: none; /* remove border to match original */
+  transition: none; /* remove hover effects to match original */
+}
+
+#referenzen-neu .r2-chip:hover {
+  background: #F3F4F6; /* no hover change like original */
+  color: #374151;
+}
+
+#referenzen-neu .r2-cta {
+  font-weight: 600; /* match Preise boxes: font-semibold = 600 */
+  border-radius: 0.75rem; /* match Preise boxes: rounded-xl */
+  padding: 1rem 1.5rem; /* match Preise boxes: py-4 px-6 equivalent */
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* subtle shadow like Preise boxes */
+  font-size: 1rem; /* match Preise boxes button text size */
+}
+
+#referenzen-neu .r2-cta.primary {
+  background: linear-gradient(135deg, #3370FF 0%, #4080FF 100%);
+  color: white;
+}
+
+#referenzen-neu .r2-cta.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(51, 112, 255, 0.3), 0 4px 6px -2px rgba(51, 112, 255, 0.05);
+}
+
+/* Controls */
+#referenzen-neu .r2-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+#referenzen-neu .r2-arrow {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  background: white;
+  border: 1px solid #F3F4F6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+#referenzen-neu .r2-arrow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(51, 112, 255, 0.05), rgba(51, 112, 255, 0.1));
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+#referenzen-neu .r2-arrow:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 15px -5px rgba(0, 0, 0, 0.08);
+  border-color: #E5E7EB;
+}
+
+#referenzen-neu .r2-arrow:hover::before {
+  opacity: 1;
+}
+
+#referenzen-neu .r2-arrow:active {
+  transform: translateY(-1px) scale(1.02);
+  transition: all 150ms ease;
+}
+
+#referenzen-neu .r2-indicator {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: white;
+  border: 1px solid #F3F4F6;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  font-size: 0.9rem;
+}
+
+/* If any indicator exists inside the slider row, hide it to keep the bottom-only placement */
+#referenzen-neu .r2-row .r2-indicator { display: none !important; }

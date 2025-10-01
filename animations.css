@@ -1,3 +1,12 @@
+/* Global font family */
+* {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
 /* Scroll Animation Styles - JavaScript gesteuert */
 .scroll-animation {
     opacity: 0 !important;
@@ -33,6 +42,17 @@
     transform: translateY(-8px) !important;
 }
 
+/* Kein Hover-Effekt für bestimmte Elemente */
+.scroll-animation.no-hover.visible:hover,
+.scroll-animation.section-title.visible:hover {
+    transform: translateY(0) scale(1) !important;
+}
+
+/* Spezielle Hover-Effekte für Referenz-Karten nach Animation */
+.referenz-card.scroll-animation.visible:hover {
+    transform: translateY(-10px) scale(1.02) !important;
+}
+
 /* Animation für Section-Titel */
 .scroll-animation.section-title {
     transform: translateY(40px) scale(0.95) !important;
@@ -42,6 +62,143 @@
 .scroll-animation.section-title.visible {
     transform: translateY(0) scale(1) !important;
 }
+
+/* Filter Button Styles für Referenzen */
+.filter-btn {
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.filter-btn.active {
+    color: white;
+}
+
+.filter-btn:not(.active) {
+    background: transparent;
+    color: #6b7280;
+}
+
+.filter-btn:hover:not(.active) {
+    color: #4b5563;
+}
+
+/* Filter Container with sliding background */
+.filter-container {
+    position: relative;
+    z-index: 1;
+}
+
+.filter-container::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
+    background: linear-gradient(135deg, #3370FF 0%, #4080FF 100%);
+    border-radius: 12px;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    z-index: 1;
+}
+
+.filter-container.verein-active::before {
+    transform: translateX(-100%);
+}
+
+/* Referenz Cards Visibility - Ultra smooth transitions */
+.referenz-card {
+    transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+}
+
+.referenz-card.hidden {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+    pointer-events: none;
+}
+
+.referenz-card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+}
+
+/* Slider for Referenzen */
+.referenzen-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 0.25rem;
+}
+
+.slider-viewport {
+    position: relative;
+    overflow: hidden; /* keep a fixed section height visually */
+    min-height: 24rem; /* fallback height so section doesn't jump before JS */
+    touch-action: pan-y; /* allow vertical scroll; don't block taps/swipes */
+}
+
+/* Keep the viewport height stable based on first page */
+.slider-viewport .slider-page {
+    min-height: 100%;
+}
+
+.slider-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0; /* pages are full width, no gap */
+    width: 100%;
+    transition: transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}
+
+/* Each page takes full viewport width */
+.slider-page {
+    flex: 0 0 100%;
+}
+
+/* Small helpers */
+#ref-prev[disabled], #ref-next[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Ensure consistent card height alignment */
+.slider-page .referenz-card {
+    height: 100%;
+}
+
+/* Fix: In Referenzen, allow text selection and avoid vertical movement on hover */
+#referenzen .referenz-card,
+#referenzen .referenz-card * {
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+/* Override general hover-lift just for Referenzen to prevent selection issues */
+#referenzen .referenz-card.scroll-animation.visible:hover {
+    transform: scale(1.02) !important; /* no translate to keep selection stable */
+}
+#referenzen .scroll-animation.visible:hover {
+    transform: scale(1.01) !important; /* softer, no vertical shift */
+}
+
+/* Row that holds outside arrows and viewport */
+.slider-row {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 10; /* ensure slider is above any decorative overlays */
+}
+
+/* Improve indicator appearance */
+#ref-indicator { line-height: 1; }
+#ref-indicator span { font-variant-numeric: tabular-nums; }
 
 /* Neue Button Styles */
 .white-shine-button {
@@ -136,3 +293,19 @@
     transform: translateY(-1px);
     box-shadow: 0 3px 8px rgba(51, 112, 255, 0.2);
 }
+
+.slider-track[data-active="false"] {
+    pointer-events: none;
+    opacity: 0;
+}
+
+.slider-track[data-active="true"] {
+    opacity: 1;
+}
+
+/* Ensure active Referenzen elements accept pointer events for click/tap/selection */
+#referenzen .slider-viewport { pointer-events: auto; }
+#referenzen .slider-track[data-active="true"] { pointer-events: auto; }
+#referenzen .slider-page { pointer-events: auto; }
+#referenzen .referenz-card, 
+#referenzen .referenz-card * { pointer-events: auto; }
