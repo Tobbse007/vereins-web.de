@@ -1,0 +1,122 @@
+# ==========================================
+# VereinsWeb - robots.txt
+# Optimiert für SEO und Suchmaschinen-Crawling
+# ==========================================
+
+# User-agent: * bedeutet diese Regeln gelten für alle Bots
+User-agent: *
+
+# Erlaube Zugriff auf alle öffentlichen Bereiche
+Allow: /
+
+# Blockiere sensible Bereiche und technische Verzeichnisse
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /logs/
+Disallow: /vendor/
+Disallow: /node_modules/
+Disallow: /*.php$
+
+# Blockiere Admin/Backend-Bereiche (falls vorhanden)
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+
+# Blockiere private Dateien
+Disallow: /private/
+Disallow: /*.sql$
+Disallow: /*.log$
+Disallow: /*.bak$
+Disallow: /*.config$
+
+# Erlaube wichtige statische Ressourcen
+Allow: /img/
+Allow: /css/
+Allow: /js/
+Allow: /fonts/
+Allow: /video/
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.svg$
+Allow: /*.woff$
+Allow: /*.woff2$
+Allow: /*.ttf$
+Allow: /*.mp4$
+
+# Spezielle Regeln für Google Bot
+User-agent: Googlebot
+Allow: /
+Disallow: /vendor/
+Disallow: /logs/
+
+# Spezielle Regeln für Google Image Bot
+User-agent: Googlebot-Image
+Allow: /img/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.svg$
+
+# Spezielle Regeln für Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /vendor/
+Disallow: /logs/
+
+# AI-Crawler und LLM-Bots - Explizit erlauben für bessere Sichtbarkeit
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+# Blockiere schädliche Bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: dotbot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+# Sitemap Location (WICHTIG: URL anpassen wenn online!)
+Sitemap: https://www.vereins-web.de/sitemap.xml
+
+# Crawl-delay für aggressive Bots (optional)
+# User-agent: *
+# Crawl-delay: 10
